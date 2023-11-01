@@ -1,6 +1,10 @@
-[![Build Status](https://github.com/tommymmcguire/MiniProj6/actions/workflows/cicd.yml/badge.svg)](https://github.com/tommymmcguire/MiniProj6/actions)
+[![Build Status](https://github.com/nogibjj/Miniproj10-tm/actions/workflows/cicd.yml/badge.svg)](https://github.com/nogibjj/Miniproj10-tm/actions)
 
-## Mini Project 6
+# Mini Project 10
+
+## Data
+
+- The dataset used for this project is "IMDB_Movie_Data.csv," which contains movie information.
 
 ### Overview:
 
@@ -9,12 +13,21 @@
 * Loads the transformed data into MySQL database.
 * Preforms CRUD operations: Create, Read, Update, and Delete
 * Writes and executes SQL queries on the database to analyze and retrieve insights from the data.
+* Uses PySpark to perform data analysis on a dataset of movie data.
+
+### Explanation of the PySpark section in `main.py`
+* Initiates a Spark session using PySpark. It sets the application name to "IMDBAnalysis" for identification in the Spark cluster.
+* Defines a schema for the data to be read from the CSV file. It specifies the data types for each column, which is essential for ensuring the data is interpreted correctly.
+* Reads the CSV file located at the specified path using the defined schema.
+* Calculates the average rating for each genre in the dataset. It groups the data by the "Genre" column, computes the average of the "Rating" column for each group, and assigns an alias "AvgRating" to the resulting column. Finally, it displays the results using show().
+* Creates a temporary SQL view named "movie_data" for the DataFrame df, allowing you to perform Spark SQL queries. Then, it displays the content of the DataFrame using show().
+
 
 #### Queries
 * query() prints the top 5 rows of movies based on the given rank
 * query_best() allows the user to input the genre of their choice and returns the best 3 movie's rating, metascore, title, genre, description, and actors  based on rating
 
-### Example of usage:
+### Example of usage for MySQL:
 
 <img width="940" alt="Screen Shot 2023-09-30 at 3 07 35 PM" src="https://github.com/tommymmcguire/sqlite-lab-mcg/assets/141086024/80201295-0b4f-474f-b2aa-7320cfe48b9b">
 
