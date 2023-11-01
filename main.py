@@ -7,6 +7,7 @@ from mylib.transform_load import load
 from mylib.query import query, query_best
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, avg
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DoubleType
 
 # Extract
 print("Extracting data...")
@@ -26,10 +27,30 @@ query_best()
 
 
 spark = SparkSession.builder.appName("IMDBAnalysis").getOrCreate()
-df = spark.read.csv("/workspaces/Miniproj10-tm/master/IMDB-Movie-Data.csv", header=True, inferSchema=True)
-genre_avg_rating = df.groupBy("genre").agg(
-    col("genre"),
-    avg(col("rating")).alias("AvgRating")
+# Define the schema based on your column names and data types
+schema = StructType([
+    StructField("Rank", IntegerType(), True),
+    StructField("Title", StringType(), True),
+    StructField("Genre", StringType(), True),
+    StructField("Description", StringType(), True),
+    StructField("Director", StringType(), True),
+    StructField("Actors", StringType(), True),
+    StructField("Year", IntegerType(), True),
+    StructField("Runtime (Minutes)", IntegerType(), True),
+    StructField("Rating", DoubleType(), True),
+    StructField("Votes", IntegerType(), True),
+    StructField("Revenue (Millions)", DoubleType(), True),
+    StructField("Metascore", DoubleType(), True)
+])
+
+# Read the CSV file with the defined schema
+df = spark.read.csv("/workspaces/Miniproj10-tm/master/IMDB-Movie-Data.csv", header=True, schema=schema)
+# df = spark.read.csv("/workspaces/Miniproj10-tm/master/IMDB-Movie-Data.csv", header=True, inferSchema=True)
+genre_avg_rating = df.groupBy("Genre").agg(
+    col("Genre"),
+    avg(col("Rating")).alias("AvgRating")
 )
+genre_avg_rating.show()
 df.createOrReplaceTempView("movie_data")
-top_rated_action_movies = spark.sql("SELECT Title, Rating FROM movie_data WHERE genre LIKE %s ORDER BY Rating DESC LIMIT 10")
+df.show()
+spark.stop()
